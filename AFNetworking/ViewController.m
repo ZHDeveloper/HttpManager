@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "HttpManager.h"
 
 @interface ViewController ()
 
@@ -16,12 +17,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    [HttpManager download:@"http://v1.mycs.cn/48/4893/27843/Oz0zOD5yNiI.mp4" downloadProgress:^(NSProgress *progress) {
+        
+        NSLog(@"%@",progress.localizedDescription);
+        
+    } completeHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        
+    }];
 }
 
 @end
