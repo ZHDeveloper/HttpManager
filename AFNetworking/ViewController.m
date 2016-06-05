@@ -18,6 +18,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
     params[@"action"] = @"getRelationList";
@@ -31,6 +33,14 @@
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@",error);
     }];
+    
+}
+
+- (void)reachabilityChanged:(NSNotification *)noti {
+    
+    Reachability *reach = [noti object];
+    
+    NetworkStatus status = [reach currentReachabilityStatus];
     
 }
 

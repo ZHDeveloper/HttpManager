@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		53632EB61D03E626000740B8 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 53632EB51D03E626000740B8 /* Reachability.m */; };
 		5368B95B1CFE68FA0021AD21 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5368B95A1CFE68FA0021AD21 /* main.m */; };
 		5368B95E1CFE68FA0021AD21 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5368B95D1CFE68FA0021AD21 /* AppDelegate.m */; };
 		5368B9611CFE68FA0021AD21 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5368B9601CFE68FA0021AD21 /* ViewController.m */; };
@@ -47,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		53632EB41D03E626000740B8 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		53632EB51D03E626000740B8 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		5368B9561CFE68FA0021AD21 /* AFNetworking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AFNetworking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5368B95A1CFE68FA0021AD21 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5368B95C1CFE68FA0021AD21 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -115,6 +118,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		53632EB31D03E626000740B8 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				53632EB41D03E626000740B8 /* Reachability.h */,
+				53632EB51D03E626000740B8 /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		5368B94D1CFE68FA0021AD21 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +151,7 @@
 		5368B9581CFE68FA0021AD21 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
+				53632EB31D03E626000740B8 /* Reachability */,
 				5371BDC91D03D6FC005F629E /* YYCache */,
 				5368B98C1CFE69100021AD21 /* AFNetworking */,
 				5368B95C1CFE68FA0021AD21 /* AppDelegate.h */,
@@ -351,6 +364,7 @@
 				5368B9611CFE68FA0021AD21 /* ViewController.m in Sources */,
 				5371BDD21D03D6FC005F629E /* YYCache.m in Sources */,
 				5368B95E1CFE68FA0021AD21 /* AppDelegate.m in Sources */,
+				53632EB61D03E626000740B8 /* Reachability.m in Sources */,
 				5368B99B1CFE69100021AD21 /* AFNetworkReachabilityManager.m in Sources */,
 				5371BDD51D03D6FC005F629E /* YYMemoryCache.m in Sources */,
 				5368B95B1CFE68FA0021AD21 /* main.m in Sources */,

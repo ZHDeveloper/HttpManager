@@ -16,15 +16,14 @@ static HttpManager *manager;
 
 @implementation HttpManager
 
-+ (void)load {
-    [self startMonitorReachability];
-}
-
 //定义单例
 + (instancetype)allocWithZone:(struct _NSZone *)zone {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [super allocWithZone:zone];
+        Reachability *reach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+        manager.reach = reach;
+        [reach startNotifier];
     });
     return manager;
 }
@@ -95,8 +94,10 @@ static HttpManager *manager;
         yyCache.memoryCache.shouldRemoveAllObjectsOnMemoryWarning = YES;
         yyCache.memoryCache.shouldRemoveAllObjectsWhenEnteringBackground = YES;
         
+        NetworkStatus status = [ShareHttpManager.reach currentReachabilityStatus];
+        
         //网络判断->没有网络从缓存中获取。
-        if (ShareHttpManager.status == AFNetworkReachabilityStatusNotReachable) {
+        if (status == NotReachable) {
             
             id data = [yyCache objectForKey:keyOfCache];
             
@@ -171,9 +172,11 @@ static HttpManager *manager;
         yyCache.memoryCache.shouldRemoveAllObjectsOnMemoryWarning = YES;
         yyCache.memoryCache.shouldRemoveAllObjectsWhenEnteringBackground = YES;
         
+        NetworkStatus status = [ShareHttpManager.reach currentReachabilityStatus];
+        
         //网络判断->没有网络从缓存中获取。
-        if (ShareHttpManager.status == AFNetworkReachabilityStatusNotReachable) {
-            
+        if (status == NotReachable) {
+
             id data = [yyCache objectForKey:keyOfCache];
             
             if (success)
@@ -278,37 +281,6 @@ static HttpManager *manager;
 
 + (void)httpCancelAllRequest {
     [ShareHttpManager.operationQueue cancelAllOperations];
-}
-
-#pragma mark - 网络判断
-+ (void)startMonitorReachability {
-    
-    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
-    
-    ShareHttpManager.reachabilityManager = manager;
-    ShareHttpManager.status = AFNetworkReachabilityStatusUnknown;
-    
-    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        
-        ShareHttpManager.status = status;
-        
-        NSLog(@"%ld",(long)status);
-        
-        NSNotificationCenter *notiCenter = [NSNotificationCenter defaultCenter];
-        
-        [notiCenter postNotificationName:kReachabilityStatusChange object:@(status)];
-        
-    }];
-    
-    [manager startMonitoring];
-    
-}
-
-+ (void)stopMonitorReachability {
-    
-    [ShareHttpManager.reachabilityManager stopMonitoring];
-    
-    ShareHttpManager.reachabilityManager = nil;
 }
 
 + (NSString *)keyWithUrl:(NSString *)urlString params:(NSDictionary *)params

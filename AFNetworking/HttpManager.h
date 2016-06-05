@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
+#import "Reachability.h"
 
 #define ShareHttpManager [HttpManager shareHttpManager]
 #define kReachabilityStatusChange @"kReachabilityStatusChange"
@@ -19,11 +20,8 @@ typedef void(^DownloadHandler)(NSURLResponse *response, NSURL *filePath, NSError
 
 @interface HttpManager : AFHTTPSessionManager
 
-//当前网络状态
-@property (nonatomic,assign) AFNetworkReachabilityStatus status;
-
-@property (nonatomic,strong) AFNetworkReachabilityManager *manager;
-
+//默认开启网络监听
+@property (nonatomic,strong) Reachability *reach;
 
 + (instancetype)shareHttpManager;
 
@@ -58,12 +56,5 @@ typedef void(^DownloadHandler)(NSURLResponse *response, NSURL *filePath, NSError
 
 //取消请求
 + (void)httpCancelAllRequest;
-
-#pragma mark - 监听网络状态
-//默认就已经开始监听
-+ (void)startMonitorReachability;
-
-+ (void)stopMonitorReachability;
-
 
 @end
