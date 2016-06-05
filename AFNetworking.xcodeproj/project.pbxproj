@@ -26,6 +26,7 @@
 		5371BDD31D03D6FC005F629E /* YYDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5371BDCD1D03D6FC005F629E /* YYDiskCache.m */; };
 		5371BDD41D03D6FC005F629E /* YYKVStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5371BDCF1D03D6FC005F629E /* YYKVStorage.m */; };
 		5371BDD51D03D6FC005F629E /* YYMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5371BDD11D03D6FC005F629E /* YYMemoryCache.m */; };
+		5371BDD71D03D7F2005F629E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5371BDD61D03D7F2005F629E /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		5371BDCF1D03D6FC005F629E /* YYKVStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYKVStorage.m; sourceTree = "<group>"; };
 		5371BDD01D03D6FC005F629E /* YYMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYMemoryCache.h; sourceTree = "<group>"; };
 		5371BDD11D03D6FC005F629E /* YYMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYMemoryCache.m; sourceTree = "<group>"; };
+		5371BDD61D03D7F2005F629E /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5371BDD71D03D7F2005F629E /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +118,7 @@
 		5368B94D1CFE68FA0021AD21 = {
 			isa = PBXGroup;
 			children = (
+				5371BDD61D03D7F2005F629E /* libsqlite3.tbd */,
 				5368B9581CFE68FA0021AD21 /* AFNetworking */,
 				5368B9721CFE68FA0021AD21 /* AFNetworkingTests */,
 				5368B97D1CFE68FA0021AD21 /* AFNetworkingUITests */,
