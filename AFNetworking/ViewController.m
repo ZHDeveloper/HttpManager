@@ -42,6 +42,7 @@
     
     NetworkStatus status = [reach currentReachabilityStatus];
     
+    NSLog(@"%ld",(long)status);
 }
 
 @end

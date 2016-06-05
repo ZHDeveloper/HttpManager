@@ -57,4 +57,9 @@ typedef void(^DownloadHandler)(NSURLResponse *response, NSURL *filePath, NSError
 //取消请求
 + (void)httpCancelAllRequest;
 
+#pragma mark - 网络监听
+- (void)startNotifierReachability;
+
+- (void)stopNotifierReachability;
+
 @end

@@ -23,7 +23,6 @@ static HttpManager *manager;
         manager = [super allocWithZone:zone];
         Reachability *reach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
         manager.reach = reach;
-        [reach startNotifier];
     });
     return manager;
 }
@@ -281,6 +280,15 @@ static HttpManager *manager;
 
 + (void)httpCancelAllRequest {
     [ShareHttpManager.operationQueue cancelAllOperations];
+}
+
+#pragma mark - 网络监听
+- (void)startNotifierReachability {
+    [self.reach startNotifier];
+}
+
+- (void)stopNotifierReachability {
+    [self.reach stopNotifier];
 }
 
 + (NSString *)keyWithUrl:(NSString *)urlString params:(NSDictionary *)params
