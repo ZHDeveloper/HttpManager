@@ -7,10 +7,18 @@
 //
 
 #import "HttpManager.h"
+#import "YYCache.h"
+#import <CommonCrypto/CommonDigest.h>
+
+#define CacheFolder @"HttpCache"
 
 static HttpManager *manager;
 
 @implementation HttpManager
+
++ (void)load {
+    [self startMonitorReachability];
+}
 
 //定义单例
 + (instancetype)allocWithZone:(struct _NSZone *)zone {
@@ -45,46 +53,152 @@ static HttpManager *manager;
     
 }
 
+#pragma mark - Get请求
+
 + (void)BGET:(NSString *)urlString parameters:(id)params success:(SuccessResponse)success failure:(FailureResponse)failure {
     
-    [self BGET:urlString parameters:params requestProgress:nil success:success failure:failure];
+    [self BGET:urlString parameters:params isCache:NO requestProgress:nil success:success failure:failure];
     
 }
 
 + (void)BGET:(NSString *)urlString parameters:(id)params requestProgress:(RequestProgress)progress success:(SuccessResponse)success failure:(FailureResponse)failure {
     
-    [[HttpManager shareHttpManager] GET:urlString parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
+    [self BGET:urlString parameters:params isCache:NO requestProgress:progress success:success failure:failure];
+    
+}
+
++ (void)BGETWithCache:(NSString *)urlString parameters:(id)params success:(SuccessResponse)success failure:(FailureResponse)failure {
+    
+    [self BGET:urlString parameters:params isCache:YES requestProgress:nil success:success failure:failure];
+    
+}
+
++ (void)BGETWithCache:(NSString *)urlString parameters:(id)params requestProgress:(RequestProgress)progress success:(SuccessResponse)success failure:(FailureResponse)failure {
+    
+    [self BGET:urlString parameters:params isCache:YES requestProgress:progress success:success failure:failure];
+    
+}
+
++ (void)BGET:(NSString *)urlString parameters:(id)params isCache:(BOOL)cache requestProgress:(RequestProgress)progress success:(SuccessResponse)success failure:(FailureResponse)failure {
+    
+    NSString *keyOfCache;
+    
+    YYCache *yyCache;
+    
+    if (cache)
+    {
+        //缓存的key：url+"#参数值"的MD5加密的字符串
+        keyOfCache = [self keyWithUrl:urlString params:params];
+        
+        yyCache = [[YYCache alloc] initWithName:CacheFolder];
+        
+        yyCache.memoryCache.shouldRemoveAllObjectsOnMemoryWarning = YES;
+        yyCache.memoryCache.shouldRemoveAllObjectsWhenEnteringBackground = YES;
+        
+        //网络判断->没有网络从缓存中获取。
+        if (ShareHttpManager.status == AFNetworkReachabilityStatusNotReachable) {
+            
+            id data = [yyCache objectForKey:keyOfCache];
+            
+            if (success)
+            {
+                success(nil,data);
+            }
+            return;
+        }
+        
+    }
+    
+    [ShareHttpManager GET:urlString parameters:params progress:^(NSProgress *downloadProgress) {
         if (progress) {
             progress(downloadProgress);
         }
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        if (success) {
+    } success:^(NSURLSessionDataTask *task, id responseObject) {
+        if (success)
+        {
             success(task,responseObject);
         }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (cache)
+        {
+            [yyCache setObject:responseObject forKey:keyOfCache];
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failure) {
             failure(task,error);
         }
     }];
     
 }
+
+#pragma mark - Post请求
 
 + (void)BPOST:(NSString *)urlString parameters:(id)params success:(SuccessResponse)success failure:(FailureResponse)failure {
     
     [self BPOST:urlString parameters:params requestProgress:nil success:success failure:failure];
+    
 }
 
 + (void)BPOST:(NSString *)urlString parameters:(id)params requestProgress:(RequestProgress)progress success:(SuccessResponse)success failure:(FailureResponse)failure {
     
-    [[HttpManager shareHttpManager] POST:urlString parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
+    [self BPOST:urlString parameters:params isCache:NO requestProgress:progress success:success failure:failure];
+    
+}
+
++ (void)BPOSTWithCache:(NSString *)urlString parameters:(id)params success:(SuccessResponse)success failure:(FailureResponse)failure {
+    
+    [self BPOST:urlString parameters:params isCache:YES requestProgress:nil success:success failure:failure];
+    
+}
+
++ (void)BPOSTWithCache:(NSString *)urlString parameters:(id)params requestProgress:(RequestProgress)progress success:(SuccessResponse)success failure:(FailureResponse)failure {
+    
+    [self BPOST:urlString parameters:params isCache:YES requestProgress:progress success:success failure:failure];
+    
+}
+
++ (void)BPOST:(NSString *)urlString parameters:(id)params isCache:(BOOL)cache requestProgress:(RequestProgress)progress success:(SuccessResponse)success failure:(FailureResponse)failure {
+    
+    NSString *keyOfCache;
+    
+    YYCache *yyCache;
+    
+    if (cache)
+    {
+        keyOfCache = [self keyWithUrl:urlString params:params];
+        
+        yyCache = [[YYCache alloc] initWithName:CacheFolder];
+        
+        yyCache.memoryCache.shouldRemoveAllObjectsOnMemoryWarning = YES;
+        yyCache.memoryCache.shouldRemoveAllObjectsWhenEnteringBackground = YES;
+        
+        //网络判断->没有网络从缓存中获取。
+        if (ShareHttpManager.status == AFNetworkReachabilityStatusNotReachable) {
+            
+            id data = [yyCache objectForKey:keyOfCache];
+            
+            if (success)
+            {
+                success(nil,data);
+            }
+            return;
+        }
+        
+    }
+    
+    [ShareHttpManager POST:urlString parameters:params progress:^(NSProgress *uploadProgress) {
         if (progress) {
             progress(uploadProgress);
         }
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        if (success) {
+    } success:^(NSURLSessionDataTask *task, id responseObject) {
+        if (success)
+        {
             success(task,responseObject);
         }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (cache)
+        {
+            [yyCache setObject:responseObject forKey:keyOfCache];
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failure) {
             failure(task,error);
         }
@@ -92,19 +206,20 @@ static HttpManager *manager;
     
 }
 
+#pragma mark - Download
 + (NSURLSessionDownloadTask *)download:(NSString *)urlString downloadProgress:(RequestProgress)progress completeHandler:(DownloadHandler)handler {
     
     NSURLRequest *downloadRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
     NSURLSessionDownloadTask *downloadTask;
     
-    downloadTask = [[HttpManager shareHttpManager] downloadTaskWithRequest:downloadRequest progress:^(NSProgress * _Nonnull downloadProgress) {
+    downloadTask = [ShareHttpManager downloadTaskWithRequest:downloadRequest progress:^(NSProgress * downloadProgress) {
         
         if (progress) {
             progress(downloadProgress);
         }
         
-    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+    } destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         
         NSString *path = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)lastObject];
         
@@ -112,7 +227,7 @@ static HttpManager *manager;
         
         return [NSURL fileURLWithPath:filePath];
         
-    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         
         if (handler) {
             handler(response,filePath,error);
@@ -129,7 +244,7 @@ static HttpManager *manager;
     
     NSURLSessionDataTask *uploadTask;
     
-    uploadTask = [[HttpManager shareHttpManager] POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    uploadTask = [ShareHttpManager POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         
         for (UIImage *image in images) {
             
@@ -140,19 +255,19 @@ static HttpManager *manager;
             [formData appendPartWithFileData:imageData name:[NSString stringWithFormat:@"pic%ld",idx] fileName:@"image.png" mimeType:@"image/jpeg"];
         }
         
-    } progress:^(NSProgress * _Nonnull uploadProgress) {
+    } progress:^(NSProgress *uploadProgress) {
         
         if (progress) {
             progress(uploadProgress);
         }
         
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    } success:^(NSURLSessionDataTask *task, id responseObject) {
         
         if (success) {
             success(task,responseObject);
         }
         
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failure) {
             failure(task,error);
         }
@@ -162,7 +277,85 @@ static HttpManager *manager;
 }
 
 + (void)httpCancelAllRequest {
-    [[HttpManager shareHttpManager].operationQueue cancelAllOperations];
+    [ShareHttpManager.operationQueue cancelAllOperations];
 }
+
+#pragma mark - 网络判断
++ (void)startMonitorReachability {
+    
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    
+    ShareHttpManager.reachabilityManager = manager;
+    ShareHttpManager.status = AFNetworkReachabilityStatusUnknown;
+    
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        
+        ShareHttpManager.status = status;
+        
+        NSLog(@"%ld",(long)status);
+        
+        NSNotificationCenter *notiCenter = [NSNotificationCenter defaultCenter];
+        
+        [notiCenter postNotificationName:kReachabilityStatusChange object:@(status)];
+        
+    }];
+    
+    [manager startMonitoring];
+    
+}
+
++ (void)stopMonitorReachability {
+    
+    [ShareHttpManager.reachabilityManager stopMonitoring];
+    
+    ShareHttpManager.reachabilityManager = nil;
+}
+
++ (NSString *)keyWithUrl:(NSString *)urlString params:(NSDictionary *)params
+{
+    if (params == nil) return nil;
+    
+    NSMutableArray *paramNames = [NSMutableArray arrayWithArray:[params allKeys]];
+    
+    // 即是key是我要传输的参数名按ASCII顺序追加起来（再加上固定名称）md5出来的
+    NSArray *newParamNames = [paramNames sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        NSString *string1 = (NSString *)obj1;
+        NSString *string2 = (NSString *)obj2;
+        
+        return [string1 compare:string2 options:NSNumericSearch];
+    }];
+    
+    NSMutableString *key = [[NSMutableString alloc] initWithString:urlString];
+    
+    for (NSString *paramName in newParamNames)
+    {
+        id paramValue = params[paramName];
+        NSString *paramValueString = [NSString stringWithFormat:@"#%@", paramValue];
+        [key appendString:paramValueString];
+    }
+    
+    return [self MD5:key];
+}
+
++ (NSString*)MD5:(NSString *)string
+{
+    // Create pointer to the string as UTF8
+    const char *ptr = [string UTF8String];
+    
+    // Create byte array of unsigned chars
+    unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
+    
+    // Create 16 byte MD5 hash value, store in buffer
+    CC_MD5(ptr,(CC_LONG)strlen(ptr), md5Buffer);
+    
+    // Convert MD5 value in the buffer to NSString of hex values
+    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [output appendFormat:@"%02x",md5Buffer[i]];
+    
+    return output;
+}
+
 
 @end

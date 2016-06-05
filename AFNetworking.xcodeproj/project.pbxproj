@@ -22,6 +22,10 @@
 		5368B99E1CFE69100021AD21 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 5368B9971CFE69100021AD21 /* AFURLResponseSerialization.m */; };
 		5368B99F1CFE69100021AD21 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5368B9991CFE69100021AD21 /* AFURLSessionManager.m */; };
 		5368B9A21CFE69690021AD21 /* HttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5368B9A11CFE69690021AD21 /* HttpManager.m */; };
+		5371BDD21D03D6FC005F629E /* YYCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5371BDCB1D03D6FC005F629E /* YYCache.m */; };
+		5371BDD31D03D6FC005F629E /* YYDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5371BDCD1D03D6FC005F629E /* YYDiskCache.m */; };
+		5371BDD41D03D6FC005F629E /* YYKVStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5371BDCF1D03D6FC005F629E /* YYKVStorage.m */; };
+		5371BDD51D03D6FC005F629E /* YYMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5371BDD11D03D6FC005F629E /* YYMemoryCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +77,14 @@
 		5368B9991CFE69100021AD21 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
 		5368B9A01CFE69690021AD21 /* HttpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpManager.h; sourceTree = "<group>"; };
 		5368B9A11CFE69690021AD21 /* HttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpManager.m; sourceTree = "<group>"; };
+		5371BDCA1D03D6FC005F629E /* YYCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYCache.h; sourceTree = "<group>"; };
+		5371BDCB1D03D6FC005F629E /* YYCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYCache.m; sourceTree = "<group>"; };
+		5371BDCC1D03D6FC005F629E /* YYDiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYDiskCache.h; sourceTree = "<group>"; };
+		5371BDCD1D03D6FC005F629E /* YYDiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYDiskCache.m; sourceTree = "<group>"; };
+		5371BDCE1D03D6FC005F629E /* YYKVStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYKVStorage.h; sourceTree = "<group>"; };
+		5371BDCF1D03D6FC005F629E /* YYKVStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYKVStorage.m; sourceTree = "<group>"; };
+		5371BDD01D03D6FC005F629E /* YYMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYMemoryCache.h; sourceTree = "<group>"; };
+		5371BDD11D03D6FC005F629E /* YYMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYMemoryCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +135,7 @@
 		5368B9581CFE68FA0021AD21 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
+				5371BDC91D03D6FC005F629E /* YYCache */,
 				5368B98C1CFE69100021AD21 /* AFNetworking */,
 				5368B95C1CFE68FA0021AD21 /* AppDelegate.h */,
 				5368B95D1CFE68FA0021AD21 /* AppDelegate.m */,
@@ -183,6 +196,21 @@
 				5368B9991CFE69100021AD21 /* AFURLSessionManager.m */,
 			);
 			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		5371BDC91D03D6FC005F629E /* YYCache */ = {
+			isa = PBXGroup;
+			children = (
+				5371BDCA1D03D6FC005F629E /* YYCache.h */,
+				5371BDCB1D03D6FC005F629E /* YYCache.m */,
+				5371BDCC1D03D6FC005F629E /* YYDiskCache.h */,
+				5371BDCD1D03D6FC005F629E /* YYDiskCache.m */,
+				5371BDCE1D03D6FC005F629E /* YYKVStorage.h */,
+				5371BDCF1D03D6FC005F629E /* YYKVStorage.m */,
+				5371BDD01D03D6FC005F629E /* YYMemoryCache.h */,
+				5371BDD11D03D6FC005F629E /* YYMemoryCache.m */,
+			);
+			path = YYCache;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,13 +345,17 @@
 			files = (
 				5368B99F1CFE69100021AD21 /* AFURLSessionManager.m in Sources */,
 				5368B9611CFE68FA0021AD21 /* ViewController.m in Sources */,
+				5371BDD21D03D6FC005F629E /* YYCache.m in Sources */,
 				5368B95E1CFE68FA0021AD21 /* AppDelegate.m in Sources */,
 				5368B99B1CFE69100021AD21 /* AFNetworkReachabilityManager.m in Sources */,
+				5371BDD51D03D6FC005F629E /* YYMemoryCache.m in Sources */,
 				5368B95B1CFE68FA0021AD21 /* main.m in Sources */,
 				5368B9A21CFE69690021AD21 /* HttpManager.m in Sources */,
 				5368B99C1CFE69100021AD21 /* AFSecurityPolicy.m in Sources */,
 				5368B99D1CFE69100021AD21 /* AFURLRequestSerialization.m in Sources */,
+				5371BDD31D03D6FC005F629E /* YYDiskCache.m in Sources */,
 				5368B99E1CFE69100021AD21 /* AFURLResponseSerialization.m in Sources */,
+				5371BDD41D03D6FC005F629E /* YYKVStorage.m in Sources */,
 				5368B99A1CFE69100021AD21 /* AFHTTPSessionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -548,6 +580,7 @@
 				5368B9851CFE68FA0021AD21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5368B9861CFE68FA0021AD21 /* Build configuration list for PBXNativeTarget "AFNetworkingTests" */ = {
 			isa = XCConfigurationList;
@@ -556,6 +589,7 @@
 				5368B9881CFE68FA0021AD21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5368B9891CFE68FA0021AD21 /* Build configuration list for PBXNativeTarget "AFNetworkingUITests" */ = {
 			isa = XCConfigurationList;
@@ -564,6 +598,7 @@
 				5368B98B1CFE68FA0021AD21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

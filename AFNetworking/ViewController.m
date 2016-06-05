@@ -18,13 +18,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [HttpManager download:@"http://v1.mycs.cn/48/4893/27843/Oz0zOD5yNiI.mp4" downloadProgress:^(NSProgress *progress) {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    
+    params[@"action"] = @"getRelationList";
+    params[@"userId"] = @"580";
+    params[@"adminTest"] = @"y";
+    
+    [HttpManager BGETWithCache:@"http://mycsapi.mycs.cn/ios/app/android/msgFriends.php" parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
-        NSLog(@"%@",progress.localizedDescription);
+        NSLog(@"%@",responseObject);
         
-    } completeHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@",error);
     }];
+    
 }
 
 @end
